@@ -1,6 +1,4 @@
-//! postcss-simple-vars: `$var: value;` declarations and `$var` references
-//! in [`crate::CssVariant::Css`] mode
-//! (auto-enabled for Css variant via `ParserOptions::allow_postcss_simple_vars`).
+//! postcss-simple-vars: `$var: value;` declarations and `$var` references in [`crate::CssVariant::Css`] mode
 //!
 //! postcss-simple-vars is a textual substitution,
 //! so the AST is intentionally minimal (no namespace, no `!default`/`!global`, no list semantics).
@@ -8,7 +6,6 @@
 //! anything more would diverge from the plugin's runtime behavior.
 
 use oxc_css_parser::ast::{PostcssSimpleVar, PostcssSimpleVarDeclaration};
-
 use oxc_formatter_core::{
     Buffer,
     builders::{space, text},

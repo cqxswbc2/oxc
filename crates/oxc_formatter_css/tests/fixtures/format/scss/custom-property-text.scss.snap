@@ -1,0 +1,67 @@
+---
+source: crates/oxc_formatter_css/tests/fixtures/mod.rs
+---
+==================== Input ====================
+// A Scss custom property value is text to dart-sass: `//` is not a comment
+// inside it, so `// (` balances the `)` below and the whole value prints
+// verbatim (sass-spec css/custom_properties/simple.hrx).
+.simple {
+  --url: url(http://foo.com/bar);
+  --single-line: // (
+    );
+  --typed: 1px  +  2px;
+}
+
+// Values that merely contain `//` keep the typed parse and its normalization
+// (a trailing `//` note stays a comment, a protocol-relative url is a url).
+.typed {
+  --n: url(//cdn/a.png)   red;
+  --s: red   // note
+  ;
+  --z: "a//b"   "c";
+}
+
+==================== Output ====================
+------------------
+{ printWidth: 80 }
+------------------
+// A Scss custom property value is text to dart-sass: `//` is not a comment
+// inside it, so `// (` balances the `)` below and the whole value prints
+// verbatim (sass-spec css/custom_properties/simple.hrx).
+.simple {
+  --url: url(http://foo.com/bar);
+  --single-line: // (
+    );
+  --typed: 1px + 2px;
+}
+
+// Values that merely contain `//` keep the typed parse and its normalization
+// (a trailing `//` note stays a comment, a protocol-relative url is a url).
+.typed {
+  --n: url(//cdn/a.png) red;
+  --s: red; // note
+  --z: "a//b" "c";
+}
+
+-------------------
+{ printWidth: 100 }
+-------------------
+// A Scss custom property value is text to dart-sass: `//` is not a comment
+// inside it, so `// (` balances the `)` below and the whole value prints
+// verbatim (sass-spec css/custom_properties/simple.hrx).
+.simple {
+  --url: url(http://foo.com/bar);
+  --single-line: // (
+    );
+  --typed: 1px + 2px;
+}
+
+// Values that merely contain `//` keep the typed parse and its normalization
+// (a trailing `//` note stays a comment, a protocol-relative url is a url).
+.typed {
+  --n: url(//cdn/a.png) red;
+  --s: red; // note
+  --z: "a//b" "c";
+}
+
+===================== End =====================

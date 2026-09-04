@@ -1,0 +1,8 @@
+/* A custom property value the typed grammar cannot read prints verbatim;
+   one it does read (`--typed`) is laid out as usual.
+   DIVERGES from Prettier (DIVERGENCES.md "custom-property-raw-verbatim"). */
+:root {
+  --z: */;
+  --x:   1px   !foo;
+  --typed:   1px   !important;
+}

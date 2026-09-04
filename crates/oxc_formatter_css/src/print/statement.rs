@@ -338,9 +338,7 @@ pub(super) fn write_declaration<'a>(decl: &Declaration<'a>, f: &mut CssFormatter
     let source = f.context().source_text();
     let name_span = to_span(decl.name.span());
     let prop = source.text_for(&name_span);
-    // Legacy IE hack prefix glued to the property name
-    // (`*color: red`; `oxc-css-parser` also accepts `.`/`:`/`#` in Css mode);
-    // postcss keeps it as part of the prop, so Prettier preserves it.
+    // postcss keeps the IE `*color` prefix as part of the prop, so Prettier preserves it.
     if let Some(prefix) = decl.name_prefix {
         write!(f, text(f.allocator().alloc_str(prefix.encode_utf8(&mut [0; 4]))));
     }
@@ -472,11 +470,15 @@ pub(super) fn write_declaration<'a>(decl: &Declaration<'a>, f: &mut CssFormatter
             }
             // The raw text includes any comments; drop them from the cursor.
             let _ = f.context().comments().take_before(value_end);
+        } else if decl.value_is_raw && prop.starts_with("--") {
+            // Text the typed grammar could not read (`--z: */;`, `--x: 1px !foo;`,
+            // Scss `--x: // (\n);`): verbatim in every variant (DIVERGENCES.md "custom-property-raw-verbatim").
+            write!(f, text(value_text));
+            let _ = f.context().comments().take_before(value_end);
         } else {
-            // Custom property values (`--*`) are parsed as a normal `<declaration-value>`
-            // via the `try_parsing_value_in_custom_property` parser option, matching Prettier (postcss).
-            // The parser keeps the raw token stream when the value does not parse (e.g. `--p: { decls };` rule blocks),
-            // so anything reaching here is uniformly a structured `ComponentValue` slice handled below.
+            // Typed values, plus a normal property's raw `<any-value>` fallback:
+            // the spec says that value is component values,
+            // so raw there is only a hole in our grammar and the value writer lays it out like typed tokens.
             let values = &*decl.value;
 
             let ctx = ValueContext {

@@ -1,4 +1,4 @@
-/* postcss-simple-vars: $var declarations and references (auto-enabled for Css) */
+/* postcss-simple-vars: $var declarations and references (Css only; a typed node for layout, not an option) */
 $primary: red;
 $breakpoint-md: 62em;
 $padding: 10px 20px;

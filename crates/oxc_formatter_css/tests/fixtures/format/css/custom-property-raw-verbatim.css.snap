@@ -1,0 +1,39 @@
+---
+source: crates/oxc_formatter_css/tests/fixtures/mod.rs
+---
+==================== Input ====================
+/* A custom property value the typed grammar cannot read prints verbatim;
+   one it does read (`--typed`) is laid out as usual.
+   DIVERGES from Prettier (DIVERGENCES.md "custom-property-raw-verbatim"). */
+:root {
+  --z: */;
+  --x:   1px   !foo;
+  --typed:   1px   !important;
+}
+
+==================== Output ====================
+------------------
+{ printWidth: 80 }
+------------------
+/* A custom property value the typed grammar cannot read prints verbatim;
+   one it does read (`--typed`) is laid out as usual.
+   DIVERGES from Prettier (DIVERGENCES.md "custom-property-raw-verbatim"). */
+:root {
+  --z: */;
+  --x: 1px   !foo;
+  --typed: 1px !important;
+}
+
+-------------------
+{ printWidth: 100 }
+-------------------
+/* A custom property value the typed grammar cannot read prints verbatim;
+   one it does read (`--typed`) is laid out as usual.
+   DIVERGES from Prettier (DIVERGENCES.md "custom-property-raw-verbatim"). */
+:root {
+  --z: */;
+  --x: 1px   !foo;
+  --typed: 1px !important;
+}
+
+===================== End =====================
